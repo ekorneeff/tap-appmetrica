@@ -23,7 +23,7 @@ def is_valid_datetime(date_string: str):
         return True
     except ParserError:
         return False
-    
+
 
 class EventsStream(AppmetricaStream):
     name = "events"
@@ -67,8 +67,11 @@ class EventsStream(AppmetricaStream):
         "application_id",
     )
 
+    # add installation_id to fields
+    schema_fields = list(fields).append("installation_id")
+
     schema = th.PropertiesList(
-        *[th.Property(i, th.StringType) for i in fields]
+        *[th.Property(i, th.StringType) for i in schema_fields]
     ).to_dict()
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
