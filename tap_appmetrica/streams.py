@@ -147,6 +147,32 @@ class InstallationsStream(AppmetricaStream):
         )
 
 
+class ProfilesStream(AppmetricaStream):
+    name = "profiles"
+    path = "/logs/v1/export/profiles.csv"
+
+    primary_keys = ["profile_id"]
+    replication_key = "appmetrica_last_start_date"
+
+    fields = [
+        "profile_id",
+        "appmetrica_gender",
+        "appmetrica_birth_date",
+        "appmetrica_notifications_enabled",
+        "appmetrica_name",
+        "appmetrica_crashes",
+        "appmetrica_errors",
+        "appmetrica_last_start_date",
+        "appmetrica_push_opens",
+        "appmetrica_push_send_count",
+        "appmetrica_device_id",
+    ]
+
+    schema = th.PropertiesList(
+        *[th.Property(i, th.StringType) for i in fields]
+    ).to_dict()
+
+
 class installDevicesStream(AppmetricaStatStream):
     name = "install_devices"
     path = ""

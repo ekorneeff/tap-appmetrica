@@ -57,6 +57,7 @@ class TapAppmetrica(Tap):
         return [
             streams.EventsStream(self),
             streams.InstallationsStream(self),
+            streams.ProfilesStream(self),
             streams.installDevicesStream(self)
         ]
 
