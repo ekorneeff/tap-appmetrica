@@ -132,7 +132,7 @@ class InstallationsStream(AppmetricaStream):
     ]
 
     # add installation_id to fields
-    schema_fields = list(fields).append("installation_id")
+    schema_fields = list(fields) + ["installation_id"]
 
     schema = th.PropertiesList(
         *[th.Property(i, th.StringType) for i in schema_fields]
