@@ -152,7 +152,7 @@ class ProfilesStream(AppmetricaStream):
     path = "/logs/v1/export/profiles.csv"
 
     primary_keys = ["profile_id"]
-    replication_key = "appmetrica_last_start_date"
+    replication_key = None
 
     fields = [
         "profile_id",
