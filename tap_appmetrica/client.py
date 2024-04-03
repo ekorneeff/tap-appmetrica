@@ -73,13 +73,15 @@ class AppmetricaStream(RESTStream):
         Yields:
             An item for every record in the response.
         """
-
-        page_date = pendulum.parse(self.get_starting_replication_key_value(context))
+        if (replication_key_value := self.get_starting_replication_key_value(context=context)) is not None:
+            page_date = pendulum.parse(self.get_starting_replication_key_value(context))
+        else:
+            page_date = pendulum.now().subtract(days=self.config["chunk_days"])
 
         if (retro_interval_days := self.config.get("retro_interval_days")) != 0:
             page_date = page_date.subtract(days=retro_interval_days)
             page_date = page_date.set(hour=0, minute=0, second=0, microsecond=0)
-        
+
         decorated_request = self.request_decorator(self._request)
 
         now = utc_now()
@@ -153,7 +155,7 @@ class AppmetricaStatStream(RESTStream):
         return SimpleAuthenticator(
             self, {"Authorization": f"OAuth {self.config['token']}"}
         )
-    
+
     @property
     def get_metrics(self) -> str:
         return ''
