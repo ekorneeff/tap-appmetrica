@@ -89,7 +89,7 @@ class InstallationsStream(AppmetricaStream):
     primary_keys = ["installation_id"]
     replication_key = "install_receive_datetime"
 
-    fields = [
+    fields = (
         "application_id",
         "click_datetime",
         "click_id",
@@ -130,7 +130,7 @@ class InstallationsStream(AppmetricaStream):
         "app_package_name",
         "app_version_name",
         "installation_id",
-    ]
+    )
 
     schema = th.PropertiesList(
         *[th.Property(i, th.StringType) for i in fields]
@@ -154,7 +154,7 @@ class ProfilesStream(AppmetricaStream):
     primary_keys = ["profile_id"]
     replication_key = None
 
-    fields = [
+    fields = (
         "profile_id",
         "appmetrica_gender",
         "appmetrica_birth_date",
@@ -166,11 +166,20 @@ class ProfilesStream(AppmetricaStream):
         "appmetrica_push_opens",
         "appmetrica_push_send_count",
         "appmetrica_device_id",
-    ]
+    )
 
     schema = th.PropertiesList(
         *[th.Property(i, th.StringType) for i in fields]
     ).to_dict()
+
+    def parse_response(self, response: requests.Response) -> Iterable[dict]:
+        response.encoding = 'utf-8'
+        reader = csv.DictReader(response.iter_lines(decode_unicode=True))
+        yield from (
+            obj
+            for obj in reader
+            if obj.get("profile_id")
+        )
 
 
 class installDevicesStream(AppmetricaStatStream):
