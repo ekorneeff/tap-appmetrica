@@ -86,7 +86,7 @@ class InstallationsStream(AppmetricaStream):
     name = "installations"
     path = "/logs/v1/export/installations.csv"
 
-    primary_keys = None
+    primary_keys = ["installation_id"]
     replication_key = "install_receive_datetime"
 
     fields = [
@@ -131,9 +131,6 @@ class InstallationsStream(AppmetricaStream):
         "app_version_name",
         "installation_id",
     ]
-
-    # add installation_id to fields
-    # schema_fields = list(fields) + ["installation_id"]
 
     schema = th.PropertiesList(
         *[th.Property(i, th.StringType) for i in fields]
