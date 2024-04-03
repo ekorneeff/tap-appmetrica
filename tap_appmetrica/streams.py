@@ -67,11 +67,8 @@ class EventsStream(AppmetricaStream):
         "application_id",
     )
 
-    # add installation_id to fields
-    schema_fields = list(fields).append("installation_id")
-
     schema = th.PropertiesList(
-        *[th.Property(i, th.StringType) for i in schema_fields]
+        *[th.Property(i, th.StringType) for i in fields]
     ).to_dict()
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
@@ -134,8 +131,11 @@ class InstallationsStream(AppmetricaStream):
         "app_version_name",
     ]
 
+    # add installation_id to fields
+    schema_fields = list(fields).append("installation_id")
+
     schema = th.PropertiesList(
-        *[th.Property(i, th.StringType) for i in fields]
+        *[th.Property(i, th.StringType) for i in schema_fields]
     ).to_dict()
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
