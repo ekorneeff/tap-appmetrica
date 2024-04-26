@@ -73,10 +73,12 @@ class AppmetricaStream(RESTStream):
         Yields:
             An item for every record in the response.
         """
+
+        #TODO: Implement no pagination variant
         if (replication_key_value := self.get_starting_replication_key_value(context=context)) is not None:
             page_date = pendulum.parse(self.get_starting_replication_key_value(context))
         else:
-            page_date = pendulum.now().subtract(days=self.config["chunk_days"])
+            page_date = pendulum.now()
 
         if (retro_interval_days := self.config.get("retro_interval_days")) != 0:
             page_date = page_date.subtract(days=retro_interval_days)
